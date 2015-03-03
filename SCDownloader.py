@@ -49,9 +49,3 @@ class SCDownloader(object):
 			outputFile.write(data.read())
 		
 
-sc=SCDownloader(CLIENT_ID)
-url="https://soundcloud.com/ahmed-abd-el-hamid-1/z2k6bs1e553c"
-sc.downloadURL(url,"""C:/Users/Mohamed/Downloads/SCDownloader/""")
-
-
-#http://api.soundcloud.com/resolve.json?url=https://soundcloud.com/rehab-hany/sets/3frwwndnpirl&client_id=af2bb48f2f847e46e0ed26061554b3be
