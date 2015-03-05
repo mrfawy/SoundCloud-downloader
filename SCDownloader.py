@@ -6,12 +6,19 @@ import argparse
 CLIENT_ID="Please add your Client ID here"
 
 class SCDownloader(object):
-	def __init__(self,client_id,outputDir=None):		
+	def __init__(self,client_id,outputDir=None,http_proxy=None):		
 		self.client_id=client_id
 		self.outputDir=outputDir
+		self.http_proxy=http_proxy
+
 
 	def requestUrl(self,url):
 		opener = urllib.request.build_opener(urllib.request.HTTPRedirectHandler())
+		if self.http_proxy:			
+			opener.add_handler(urllib.request.ProxyHandler({'http': self.http_proxy}))
+			opener.add_handler(urllib.request.ProxyHandler({'https': self.http_proxy}))
+			print("added handler "+self.http_proxy)
+		
 		urllib.request.install_opener(opener)
 		req = urllib.request.Request(url)		
 		res= urllib.request.urlopen(req)		
@@ -65,6 +72,7 @@ parser = argparse.ArgumentParser(description='Download tracks/Playlists from sou
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('-u', '--url',help='URL to download from')
 group.add_argument('-f', '--file',help='A file containng list of URLs to download from')
+parser.add_argument('-p','--proxy',help="http proxy settings ,e.g. proxy_host:port")
 parser.add_argument('-c','--client',help='CliendID , refer to soundcloud API doc for authentication')
 parser.add_argument('-o','--output',help='Folder path to save downlaods, defaults to application dir')
 
@@ -72,7 +80,7 @@ args = parser.parse_args()
 
 if args.client :
 	CLIENT_ID=args.client	
-sc=SCDownloader(CLIENT_ID,args.output)
+sc=SCDownloader(CLIENT_ID,args.output,args.proxy)
 if args.url:
 	sc.downloadURL(args.url)
 if args.file:
