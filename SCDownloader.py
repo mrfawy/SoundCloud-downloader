@@ -1,13 +1,14 @@
 import urllib.request
 import json
 import os
+import argparse
 
-
-CLIENT_ID="please add your CLIENT_ID"
+CLIENT_ID="Please add your Client ID here"
 
 class SCDownloader(object):
-	def __init__(self,client_id):		
+	def __init__(self,client_id,outputDir=None):		
 		self.client_id=client_id
+		self.outputDir=outputDir
 
 	def requestUrl(self,url):
 		opener = urllib.request.build_opener(urllib.request.HTTPRedirectHandler())
@@ -29,7 +30,7 @@ class SCDownloader(object):
 
 		self.downloadStream(stream_url,outputFileName)
 
-	def downloadURL(self,url,outputDir=None):
+	def downloadURL(self,url):
 		print("Processing URL:"+url)
 		serviceUrl='http://api.soundcloud.com/resolve.json?url={0}&client_id={1}'.format(url,self.client_id)			
 		res= self.requestUrl(serviceUrl)	
@@ -43,11 +44,11 @@ class SCDownloader(object):
 		if 'kind' in resource and resource['kind']=="track":
 			print("Detected Single Track :")
 			print(resource['title'].encode('utf-8'))
-			self.downloadTrack(resource,outputDir)
+			self.downloadTrack(resource,self.outputDir)
 		elif resource['tracks']!=None:
 			print("Detected Playlist with "+ str(resource['track_count'])+" track(s)")
 			for track in resource['tracks']:
-				self.downloadTrack(track,outputDir+"/"+resource['title'] if (outputDir!=None) else resource['title'])
+				self.downloadTrack(track,self.outputDir+"/"+resource['title'] if (self.outputDir!=None) else resource['title'])
 		else:
 			print("Can't determine link type !! , Skipping ...")
 	
@@ -56,6 +57,25 @@ class SCDownloader(object):
 		data = urllib.request.urlopen(serviceUrl)		
 		with open(fileName, 'wb') as outputFile:
 			outputFile.write(data.read())
-		print("downloaded to : ")
+		print("Saved to : ")
 		print(fileName.encode('utf-8'))
-		
+
+
+parser = argparse.ArgumentParser(description='Download tracks/Playlists from soundcloud')
+group = parser.add_mutually_exclusive_group(required=True)
+group.add_argument('-u', '--url',help='URL to download from')
+group.add_argument('-f', '--file',help='A file containng list of URLs to download from')
+parser.add_argument('-c','--client',help='CliendID , refer to soundcloud API doc for authentication')
+parser.add_argument('-o','--output',help='Folder path to save downlaods, defaults to application dir')
+
+args = parser.parse_args()
+
+if args.client :
+	CLIENT_ID=args.client	
+sc=SCDownloader(CLIENT_ID,args.output)
+if args.url:
+	sc.downloadURL(args.url)
+if args.file:
+	urls = [line.strip() for line in open(args.file)]
+	for url in urls:
+		sc.downloadURL(url)
