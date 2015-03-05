@@ -3,7 +3,9 @@ import json
 import os
 import argparse
 
-CLIENT_ID="Please add your Client ID here"
+CLIENT_ID="please add your APP ID"
+HTTP_PROXY=None
+OUTPUT_DIR="./SCDownloads"
 
 class SCDownloader(object):
 	def __init__(self,client_id,outputDir=None,http_proxy=None):		
@@ -79,8 +81,13 @@ parser.add_argument('-o','--output',help='Folder path to save downlaods, default
 args = parser.parse_args()
 
 if args.client :
-	CLIENT_ID=args.client	
-sc=SCDownloader(CLIENT_ID,args.output,args.proxy)
+	CLIENT_ID=args.client
+if args.proxy:
+	HTTP_PROXY=args.proxy
+if args.output:
+	OUTPUT_DIR=args.output
+
+sc=SCDownloader(CLIENT_ID,OUTPUT_DIR,HTTP_PROXY)
 if args.url:
 	sc.downloadURL(args.url)
 if args.file:
