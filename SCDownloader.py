@@ -75,7 +75,7 @@ group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('-u', '--url',help='URL to download from')
 group.add_argument('-f', '--file',help='A file containng list of URLs to download from')
 parser.add_argument('-p','--proxy',help="http proxy settings ,e.g. proxy_host:port")
-parser.add_argument('-c','--client',help='CliendID , refer to soundcloud API doc for authentication')
+parser.add_argument('-c','--client',help='ClientID , refer to soundcloud API doc for authentication')
 parser.add_argument('-o','--output',help='Folder path to save downlaods, defaults to application dir')
 
 args = parser.parse_args()
