@@ -2,7 +2,7 @@
 Download soundCloud files given browser URL ( either track or playlist) 
 
 #### Features
-* Simple util , with no depencies , just download , run via python (3+)
+* Simple util, few lines of code , with no depencies , just download , run via python (3+)
 * Works on Linux/Windows 
 * Accepts signle url or a file (line separated) list of urls 
 * Optional save file to selected dir 
@@ -16,10 +16,10 @@ SCDownloader.py -u "your soundcloud browser url " -c "your client ID"
 SCDownloader.py -u https://soundcloud.com/manoeldodriguesfilho/hans-zimmer-inception-time -c "your client ID"
 
 * Notes:
- * to create your client ID please refer to soundcloud doc , you can access yours at [your apps ] (http://soundcloud.com/you/apps)
+ * To create your client ID please refer to soundcloud doc , you can access yours at [your apps ] (http://soundcloud.com/you/apps)
  
 ### Copyrights
-This util should be only used according to soundcloud copyrights and privacy rules
+This tool  should be only used according to soundcloud copyrights and privacy rules
 
 ### Usage
 SCDownloader.py (-u URL | -f FILE) [-p PROXY] [-c CLIENT] [-o OUTPUT]
